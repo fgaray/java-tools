@@ -27,6 +27,7 @@ genGetSet opts = do
         methodNames = getMethodNames . concat . map getDecl $ body
 
 
+    mapM_ putStrLn . (map show) $ sets ++ gets
     mapM_ putStrLn . (map prettyPrint) $ sets ++ gets
 
     where

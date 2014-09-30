@@ -59,7 +59,8 @@ executable java-tools
   -- Other library packages from which modules are imported.
   build-depends:       base >=4.7 && <4.8,
                        language-java >= 0.2.7 && <0.2.8,
-                       optparse-applicative >= 0.10.0 && <0.11
+                       optparse-applicative >= 0.10.0 && <0.11,
+                       split >= 0.2.2 && <0.3
   
   -- Directories containing source files.
   hs-source-dirs:      src

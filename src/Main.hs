@@ -5,6 +5,7 @@ import Control.Monad (join)
 
 
 import GenGetSet
+import GenBussinesMethod
 
 
 optionsGetSet :: Parser OptionsGetSet
@@ -14,7 +15,16 @@ optionsGetSet = OptionsGetSet
                 <> help "The Java file to add the getters and setters"
                 <> short 'f'
             )
-                            
+
+optionsGenBussinesMethod :: Parser OptionsGenBussinesMethod
+optionsGenBussinesMethod = OptionsGenBussinesMethod
+    <$> (strOption
+            ( long "quick"
+                <> help "A quick string to generate the method. For example => name;int>hello:String,world:String"
+                <> short 'q'
+            ))
+
+
 
 
 opts :: Parser (IO ())
@@ -22,6 +32,11 @@ opts = subparser
     ( command "gen-get-set" (info (helper <*> pure genGetSet <*> optionsGetSet) 
             ( progDesc "Generate the getters and setter in the given file"
             
+            ))
+    <>
+      command "gen-bm" (info (helper <*> pure genBussinesMethod <*> optionsGenBussinesMethod)
+            ( progDesc "Generate a bussines method"
+
             ))
     )
 
