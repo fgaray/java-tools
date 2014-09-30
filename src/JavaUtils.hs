@@ -45,6 +45,16 @@ getFieldDecl = catMaybes . map (getD fn)
         fn _ = Nothing
 
 
+getMethodNames :: [Decl] -> [String]
+getMethodNames = catMaybes . map (getD getMethodName)
+
+
+getMethodName :: MemberDecl -> Maybe String
+getMethodName (MethodDecl _ _ _ (Ident str) _ _ _) = Just str
+getMethodName _                                    = Nothing
+
+
+
 
 fixDecL :: (Type, [VarDecl]) -> [(Type, VarDecl)]
 fixDecL (typ, vs) = map (\x -> (typ, x)) vs

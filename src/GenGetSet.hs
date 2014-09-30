@@ -6,6 +6,7 @@ import Language.Java.Syntax
 import Language.Java.Pretty
 
 import Data.Maybe
+import Data.List (find)
 import JavaUtils
 import Control.Monad (mapM_)
 
@@ -21,14 +22,22 @@ genGetSet opts = do
     let body = catMaybes . map getClassBody . getClasses . getBodyClass $ ast
         fieldDecl = concat . map getFieldDecl . map getDecl $ body
         fixed = concat . map fixDecL $ fieldDecl
-        sets = map generateSet fixed
-        gets = map generateGet fixed
-
+        sets = filter (noRepeatedMethods methodNames) . map generateSet $ fixed
+        gets = filter (noRepeatedMethods methodNames) . map generateGet $ fixed
+        methodNames = getMethodNames . concat . map getDecl $ body
 
 
     mapM_ putStrLn . (map prettyPrint) $ sets ++ gets
 
+    where
+        noRepeatedMethods :: [String] -> MemberDecl  -> Bool
+        noRepeatedMethods l m = case getMethodName m of
+                                    Nothing -> True
+                                    Just name -> case find (==name) l of
+                                                    Nothing -> True
+                                                    Just _  -> False
 
+        
 
 
 generateGet :: (Type, VarDecl) -> MemberDecl
